@@ -161,9 +161,7 @@ app.post("/home/adminLogin/adminPage", async (req, res, next) => {
     //    withCredentials: true,
     //    httpOnly: false,
     //  });
-    res
-      .status(201)
-      .json({ message: "Admin logged in successfully", success: true });
+    res.render("./listings/adminDashboard.ejs");
     next();
   } catch (error) {
     console.error(error);
@@ -245,5 +243,110 @@ app.post("/home/teacherLogin/teacherPage", async (req, res, next) => {
     console.error(error);
   }
 });
+
+
+//adminPage add new Student 
+
+app.get("/home/adminLogin/adminPage/addNewStudent",(req,res)=>{
+  res.render("./listings/addNewStudent.ejs");
+});
+
+
+app.post("/home/adminLogin/adminPage/addNewStudent",(req,res)=>{
+
+
+  let details = {...req.body.student};
+
+
+
+  let userPass = details.Password;
+
+   bcrypt.hash(userPass, 10, async function(err,hash) {
+
+  let  student = new studentLoginModel (({
+    name: details.name,
+    fathername: details.fathername,
+    mothername:details.mothername,
+    univno:details.univno,
+    regno:details.regno,
+    course:details.course,
+    department:details.department,
+    Username:details.Username,
+    mobilenumber:details.mobilenumber,
+    gender:details.gender,
+    dob:details.dob,
+    yearofadmission:details.yearofadmission,
+    address:details.address,
+    Password : hash,
+
+}))
+
+  await student.save();
+
+})
+
+});
+
+//admin page add new teacher 
+
+
+app.get("/home/adminLogin/adminPage/addNewTeacher",(req,res)=>{
+
+  res.render("./listings/addNewTeacher.ejs");
+
+});
+
+
+app.post("/home/adminLogin/adminPage/addNewTeacher",(req,res)=>{
+
+
+  let details = {...req.body.teacher};
+
+
+
+  let userPass = details.Password;
+
+   bcrypt.hash(userPass, 10, async function(err,hash) {
+
+  let  student = new studentLoginModel (({
+    name: details.name,
+    fathername: details.fathername,
+    mothername:details.mothername,
+    univno:details.univno,
+    regno:details.regno,
+    course:details.course,
+    department:details.department,
+    Username:details.Username,
+    mobilenumber:details.mobilenumber,
+    gender:details.gender,
+    dob:details.dob,
+    yearofadmission:details.yearofadmission,
+    address:details.address,
+    Password : hash,
+
+}))
+
+  await student.save();
+
+})
+
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   
+
 
 
