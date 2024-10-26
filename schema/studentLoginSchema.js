@@ -57,6 +57,7 @@ const studentLoginSchema = new Schema({
   Password: {
     type: String,
     required: true,
+    
   },
 });
 

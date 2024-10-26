@@ -56,12 +56,9 @@ const url = process.env.MONGO_URL;
 //   console.log(res);
 // });
 
-
 //student Schema
 
-
 // let myPass = "user1@1233";
-
 
 // bcrypt.hash(myPass, 10, function(err, hash) {
 
@@ -79,9 +76,7 @@ const url = process.env.MONGO_URL;
 
 // teacher Schema
 
-
 // let myPass = "teacher1@1233";
-
 
 // bcrypt.hash(myPass, 10, function(err, hash) {
 
@@ -96,8 +91,6 @@ const url = process.env.MONGO_URL;
 // });
 
 // });
-
-
 
 app.listen(8080, () => {
   console.log("App is Listening on Port 8080");
@@ -133,23 +126,22 @@ app.get("/home/adminLogin", (req, res) => {
   res.render("./listings/adminLogin.ejs");
 });
 
- //Admin Login Authorization :
+//Admin Login Authorization :
 
 app.post("/home/adminLogin/adminPage", async (req, res, next) => {
   const { Username, Password } = req.body;
 
   try {
     const { Username, Password } = req.body;
-    
+
     if (!Username || !Password) {
       return res.json({ message: "All fields are required" });
     }
     const Admin = await adminModel.findOne({ Username });
-   
+
     if (!Admin) {
       return res.json({ message: "Incorrect password or email" });
     }
-   
 
     const auth = await bcrypt.compare(req.body.Password, Admin.Password);
 
@@ -168,7 +160,6 @@ app.post("/home/adminLogin/adminPage", async (req, res, next) => {
   }
 });
 
-
 //Student Login Authorization :
 
 app.post("/home/studentLogin/studentPage", async (req, res, next) => {
@@ -176,16 +167,15 @@ app.post("/home/studentLogin/studentPage", async (req, res, next) => {
 
   try {
     const { Username, Password } = req.body;
-    
+
     if (!Username || !Password) {
       return res.json({ message: "All fields are required" });
     }
     const Student = await studentLoginModel.findOne({ Username });
-   
+
     if (!Student) {
       return res.json({ message: "Incorrect password or email" });
     }
-   
 
     const auth = await bcrypt.compare(req.body.Password, Student.Password);
 
@@ -197,15 +187,12 @@ app.post("/home/studentLogin/studentPage", async (req, res, next) => {
     //    withCredentials: true,
     //    httpOnly: false,
     //  });
-    res
-      .status(201)
-      .json({ message: "Student logged in successfully", success: true });
+    res.render("./listings/studentDashboard.ejs");
     next();
   } catch (error) {
     console.error(error);
   }
 });
-
 
 //Teacher Login Authorization :
 
@@ -214,16 +201,15 @@ app.post("/home/teacherLogin/teacherPage", async (req, res, next) => {
 
   try {
     const { Username, Password } = req.body;
-    
+
     if (!Username || !Password) {
       return res.json({ message: "All fields are required" });
     }
     const Teacher = await teacherLoginModel.findOne({ Username });
-   
+
     if (!Teacher) {
       return res.json({ message: "Incorrect password or email" });
     }
-   
 
     const auth = await bcrypt.compare(req.body.Password, Teacher.Password);
 
@@ -244,109 +230,68 @@ app.post("/home/teacherLogin/teacherPage", async (req, res, next) => {
   }
 });
 
+//adminPage add new Student
 
-//adminPage add new Student 
-
-app.get("/home/adminLogin/adminPage/addNewStudent",(req,res)=>{
+app.get("/home/adminLogin/adminPage/addNewStudent", (req, res) => {
   res.render("./listings/addNewStudent.ejs");
 });
 
-
-app.post("/home/adminLogin/adminPage/addNewStudent",(req,res)=>{
-
-
-  let details = {...req.body.student};
-
-
+app.post("/home/adminLogin/adminPage/addNewStudent", (req, res) => {
+  let details = { ...req.body.student };
 
   let userPass = details.Password;
 
-   bcrypt.hash(userPass, 10, async function(err,hash) {
+  bcrypt.hash(userPass, 10, async function (err, hash) {
+    let student = new studentLoginModel({
+      name: details.name,
+      fathername: details.fathername,
+      mothername: details.mothername,
+      univno: details.univno,
+      regno: details.regno,
+      course: details.course,
+      department: details.department,
+      Username: details.Username,
+      mobilenumber: details.mobilenumber,
+      gender: details.gender,
+      dob: details.dob,
+      yearofadmission: details.yearofadmission,
+      address: details.address,
+      Password: hash,
+    });
 
-  let  student = new studentLoginModel (({
-    name: details.name,
-    fathername: details.fathername,
-    mothername:details.mothername,
-    univno:details.univno,
-    regno:details.regno,
-    course:details.course,
-    department:details.department,
-    Username:details.Username,
-    mobilenumber:details.mobilenumber,
-    gender:details.gender,
-    dob:details.dob,
-    yearofadmission:details.yearofadmission,
-    address:details.address,
-    Password : hash,
-
-}))
-
-  await student.save();
-
-})
+    await student.save();
+  });
 
 });
 
-//admin page add new teacher 
+//admin page add new teacher
 
-
-app.get("/home/adminLogin/adminPage/addNewTeacher",(req,res)=>{
-
+app.get("/home/adminLogin/adminPage/addNewTeacher", (req, res) => {
   res.render("./listings/addNewTeacher.ejs");
-
 });
 
-
-app.post("/home/adminLogin/adminPage/addNewTeacher",(req,res)=>{
-
-
-  let details = {...req.body.teacher};
-
-
+app.post("/home/adminLogin/adminPage/addNewTeacher", (req, res) => {
+  let details = { ...req.body.teacher };
 
   let userPass = details.Password;
 
-   bcrypt.hash(userPass, 10, async function(err,hash) {
+  bcrypt.hash(userPass, 10, async function (err, hash) {
+    let teacher = new teacherLoginModel({
+      name: details.name,
+      teacherid: details.teacherid,
+      department: details.department,
+      joiningdate: details.joiningdate,
+      Username: details.Username,
+      mobilenumber: details.mobilenumber,
+      gender: details.gender,
+      dob: details.dob,
+      address: details.address,
+      Password: hash,
+    });
 
-  let  student = new studentLoginModel (({
-    name: details.name,
-    fathername: details.fathername,
-    mothername:details.mothername,
-    univno:details.univno,
-    regno:details.regno,
-    course:details.course,
-    department:details.department,
-    Username:details.Username,
-    mobilenumber:details.mobilenumber,
-    gender:details.gender,
-    dob:details.dob,
-    yearofadmission:details.yearofadmission,
-    address:details.address,
-    Password : hash,
+    await teacher.save();
+  });
 
-}))
 
-  await student.save();
-
-})
-
+  
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-   
-
-
-
