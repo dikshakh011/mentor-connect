@@ -18,33 +18,27 @@
         <tr>
           <th scope="col">Serial</th>
           <th scope="col">Name</th>
-          <th scope="col">Univ Roll No</th>
-          <th scope="col">Reg No</th>
-          <th scope="col">Course</th>
+          <th scope="col">Teacher ID</th>
           <th scope="col">Department</th>
           <th scope="col">Mobile No</th>
           <th scope="col">Gender</th>
-          <th scope="col">Year of Admission</th>
           <th scope="col"></th>
         </tr>
       </thead>
 
       <tbody>
-        <% for( let Student of listOfStudents ) { %>
+        <% for( let Teacher of listOfTeachers ) { %>
 
         <tr>
           <th scope="row"><%=count++%></th>
 
-          <td><%= Student.name %></td>
-          <td><%= Student.univno %></td>
-          <td><%= Student.regno %></td>
-          <td><%= Student.course %></td>
-          <td><%= Student.department %></td>
-          <td><%= Student.mobilenumber %></td>
-          <td><%= Student.gender %></td>
-          <td><%= Student.yearofadmission %></td>
+          <td><%= Teacher.name %></td>
+          <td><%= Teacher.teacherid %></td>
+          <td><%= Teacher.department %></td>
+          <td><%= Teacher.mobilenumber %></td>
+          <td><%= Teacher.gender %></td>
           <td>
-            <form action="/home/adminLogin/adminPage/showExistingStudents/<%= Student._id %>">
+            <form action="/home/adminLogin/adminPage/showExistingTeachers/<%= Teacher._id %>">
             <button class="btn btn-danger">Show More</button>
           </form>
           </td>

@@ -159,9 +159,7 @@ app.post("/home/teacherLogin/teacherPage", async (req, res, next) => {
     //    withCredentials: true,
     //    httpOnly: false,
     //  });
-    res
-      .status(201)
-      .json({ message: "Teacher logged in successfully", success: true });
+    res.render("./listings/teacherDashboard.ejs");
     next();
   } catch (error) {
     console.error(error);
@@ -232,13 +230,45 @@ app.post("/home/adminLogin/adminPage/addNewTeacher", (req, res) => {
 
 //admin panel show existing students
 
-app.get("/home/adminLogin/adminPage/showExistingStudents",async(req,res)=>{
-
-
+app.get("/home/adminLogin/adminPage/showExistingStudents", async (req, res) => {
+  let count = 1;
 
   let listOfStudents = await studentLoginModel.find({});
 
-  res.render("./listings/showExistingStudents.ejs",{listOfStudents})
+  res.render("./listings/showExistingStudents.ejs", { listOfStudents, count });
+});
 
 
-})
+//admin panel showing existing teachers
+
+app.get("/home/adminLogin/adminPage/showExistingTeachers", async (req, res) => {
+  let count = 1;
+
+  let listOfTeachers = await teacherLoginModel.find({});
+
+  res.render("./listings/showExistingTeachers.ejs", { listOfTeachers, count });
+});
+
+//student view more 
+
+app.get("/home/adminLogin/adminPage/showExistingStudents/:id",async(req,res)=>{
+
+  let {id} = req.params;
+
+let Student = await studentLoginModel.findById(id);
+
+res.render("./listings/showMoreStudent.ejs",{Student});
+
+
+});
+
+app.get("/home/adminLogin/adminPage/showExistingTeachers/:id",async(req,res)=>{
+
+  let {id} = req.params;
+
+let Teacher = await teacherLoginModel.findById(id);
+
+res.render("./listings/showMoreTeacher.ejs",{Teacher});
+
+
+});

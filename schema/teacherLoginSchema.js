@@ -6,7 +6,7 @@ const teacherLoginSchema = new Schema({
         required: true,
       },
       teacherid: {
-        type: String,
+        type: Number,
         required: true,
       },
       department: {
