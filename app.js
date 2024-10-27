@@ -30,68 +30,6 @@ app.use(cors());
 
 const url = process.env.MONGO_URL;
 
-//checking connection
-
-//admin Schema
-
-// let myPass = "Admin1@1233";
-// // let hashPass = await bcrypt.hash(myPass,10);
-// // console.log(hashPass);
-
-// bcrypt.hash(myPass, 10, function(err, hash) {
-
-//   let  sampleAdmin = new adminModel (({
-//     Username: "admin1@gmail.com",
-//     Password : hash,
-
-// }));
-
-//     sampleAdmin.save().then((res)=>{
-//     console.log("Data Saved");
-// });
-
-// });
-
-// adminModel.findOne({Username:"admin1@gmail.com"}).then((res)=>{
-//   console.log(res);
-// });
-
-//student Schema
-
-// let myPass = "user1@1233";
-
-// bcrypt.hash(myPass, 10, function(err, hash) {
-
-//   let  sampleUser = new studentLoginModel (({
-//     Username: "user1@gmail.com",
-//     Password : hash,
-
-// }));
-
-//     sampleUser.save().then((res)=>{
-//     console.log("Data Saved");
-// });
-
-// });
-
-// teacher Schema
-
-// let myPass = "teacher1@1233";
-
-// bcrypt.hash(myPass, 10, function(err, hash) {
-
-//   let  sampleUser = new teacherLoginModel (({
-//     Username: "teacher1@gmail.com",
-//     Password : hash,
-
-// }));
-
-//     sampleUser.save().then((res)=>{
-//     console.log("Data Saved");
-// });
-
-// });
-
 app.listen(8080, () => {
   console.log("App is Listening on Port 8080");
 
@@ -261,7 +199,6 @@ app.post("/home/adminLogin/adminPage/addNewStudent", (req, res) => {
 
     await student.save();
   });
-
 });
 
 //admin page add new teacher
@@ -291,7 +228,17 @@ app.post("/home/adminLogin/adminPage/addNewTeacher", (req, res) => {
 
     await teacher.save();
   });
-
-
-  
 });
+
+//admin panel show existing students
+
+app.get("/home/adminLogin/adminPage/showExistingStudents",async(req,res)=>{
+
+
+
+  let listOfStudents = await studentLoginModel.find({});
+
+  res.render("./listings/showExistingStudents.ejs",{listOfStudents})
+
+
+})
