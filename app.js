@@ -172,12 +172,29 @@ app.get("/home/adminLogin/adminPage/addNewStudent", (req, res) => {
   res.render("./listings/addNewStudent.ejs");
 });
 
-app.post("/home/adminLogin/adminPage/addNewStudent", (req, res) => {
+app.post("/home/adminLogin/adminPage/addNewStudent", async (req, res) => {
   let details = { ...req.body.student };
-
   let userPass = details.Password;
 
+  const existingStudent = await studentLoginModel.findOne({
+    univno: details.univno,
+  });
+  if (existingStudent) {
+    return res
+      .status(400)
+      .render("./listings/addNewStudent.ejs", {
+        success: null,
+        error: "Student with this university number already exists.",
+      });
+  }
+
   bcrypt.hash(userPass, 10, async function (err, hash) {
+    if (err) {
+      return res.render("./listings/addNewStudent.ejs", {
+        success: null,
+        error: "Error while hashing password.",
+      });
+    }
     let student = new studentLoginModel({
       name: details.name,
       fathername: details.fathername,
@@ -195,22 +212,33 @@ app.post("/home/adminLogin/adminPage/addNewStudent", (req, res) => {
       Password: hash,
     });
 
+    res.render("./listings/addNewStudent.ejs", {
+      success: "Student added successfully!",
+      error: null,
+    });
+
     await student.save();
   });
 });
-
 //admin page add new teacher
 
 app.get("/home/adminLogin/adminPage/addNewTeacher", (req, res) => {
   res.render("./listings/addNewTeacher.ejs");
 });
 
-app.post("/home/adminLogin/adminPage/addNewTeacher", (req, res) => {
+app.post("/home/adminLogin/adminPage/addNewTeacher", async (req, res) => {
   let details = { ...req.body.teacher };
-
   let userPass = details.Password;
 
+  const existingTeacher = await teacherLoginModel.findOne({ teacherid: details.teacherid });
+  if (existingTeacher) {
+    return res.status(400).render("./listings/addNewTeacher.ejs", { success: null, error: "Teacher with this teacher ID already exists." });
+  }
+
   bcrypt.hash(userPass, 10, async function (err, hash) {
+    if (err) {
+      return res.render("./listings/addNewTeacher.ejs", { success: null, error: "Error while hashing password." });
+    }
     let teacher = new teacherLoginModel({
       name: details.name,
       teacherid: details.teacherid,
@@ -225,6 +253,7 @@ app.post("/home/adminLogin/adminPage/addNewTeacher", (req, res) => {
     });
 
     await teacher.save();
+    res.render("./listings/addNewTeacher.ejs", { success: "Teacher added successfully!", error: null });
   });
 });
 
@@ -238,7 +267,6 @@ app.get("/home/adminLogin/adminPage/showExistingStudents", async (req, res) => {
   res.render("./listings/showExistingStudents.ejs", { listOfStudents, count });
 });
 
-
 //admin panel showing existing teachers
 
 app.get("/home/adminLogin/adminPage/showExistingTeachers", async (req, res) => {
@@ -249,26 +277,110 @@ app.get("/home/adminLogin/adminPage/showExistingTeachers", async (req, res) => {
   res.render("./listings/showExistingTeachers.ejs", { listOfTeachers, count });
 });
 
-//student view more 
+//student view more
 
-app.get("/home/adminLogin/adminPage/showExistingStudents/:id",async(req,res)=>{
+app.get(
+  "/home/adminLogin/adminPage/showExistingStudents/:id",
+  async (req, res) => {
+    let { id } = req.params;
 
-  let {id} = req.params;
+    let Student = await studentLoginModel.findById(id);
 
-let Student = await studentLoginModel.findById(id);
+    res.render("./listings/showMoreStudent.ejs", { Student });
+  }
+);
 
-res.render("./listings/showMoreStudent.ejs",{Student});
+//Teacher View More
 
+app.get(
+  "/home/adminLogin/adminPage/showExistingTeachers/:id",
+  async (req, res) => {
+    let { id } = req.params;
 
-});
+    let Teacher = await teacherLoginModel.findById(id);
 
-app.get("/home/adminLogin/adminPage/showExistingTeachers/:id",async(req,res)=>{
+    res.render("./listings/showMoreTeacher.ejs", { Teacher });
+  }
+);
 
-  let {id} = req.params;
+//Edit Specific Student Details
 
-let Teacher = await teacherLoginModel.findById(id);
+app.get(
+  "/home/adminLogin/adminPage/showExistingStudents/:id/edit",
+  async (req, res) => {
+    let { id } = req.params;
 
-res.render("./listings/showMoreTeacher.ejs",{Teacher});
+    let Student = await studentLoginModel.findById(id);
 
+    res.render("./listings/editStudentDetails.ejs", { Student });
+  }
+);
 
-});
+app.patch(
+  "/home/adminLogin/adminPage/showExistingStudents/:id",
+  async (req, res) => {
+    let { id } = req.params;
+
+    // console.log({...req.body.student});
+
+    await studentLoginModel.findByIdAndUpdate(id, { ...req.body.student });
+
+    // console.log({...req.body.student});
+
+    res.redirect(`/home/adminLogin/adminPage/showExistingStudents/${id}`);
+  }
+);
+
+// edit Specific teacher details in DB
+
+app.get(
+  "/home/adminLogin/adminPage/showExistingTeachers/:id/edit",
+  async (req, res) => {
+    let { id } = req.params;
+
+    let Teacher = await teacherLoginModel.findById(id);
+
+    res.render("./listings/editTeacherDetails.ejs", { Teacher });
+  }
+);
+
+app.patch(
+  "/home/adminLogin/adminPage/showExistingTeachers/:id",
+  async (req, res) => {
+    let { id } = req.params;
+
+    // console.log({...req.body.student});
+
+    await teacherLoginModel.findByIdAndUpdate(id, { ...req.body.teacher });
+
+    console.log({ ...req.body.teacher });
+
+    res.redirect(`/home/adminLogin/adminPage/showExistingTeachers/${id}`);
+  }
+);
+
+//delete a particular student
+
+app.delete(
+  "/home/adminLogin/adminPage/showExistingStudents/:id",
+  async (req, res) => {
+    let { id } = req.params;
+
+    await studentLoginModel.findByIdAndDelete(id);
+
+    res.redirect("/home/adminLogin/adminPage/showExistingStudents");
+  }
+);
+
+//delete a particular teacher
+
+app.delete(
+  "/home/adminLogin/adminPage/showExistingTeachers/:id",
+  async (req, res) => {
+    let { id } = req.params;
+
+    await teacherLoginModel.findByIdAndDelete(id);
+
+    res.redirect("/home/adminLogin/adminPage/showExistingTeachers");
+  }
+);

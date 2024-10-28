@@ -91,10 +91,15 @@ button:hover {
         </section>
 
         
-       
-        <button class="btn btn-primary offset-5">Edit Details</button>
-        <button class="btn btn-danger ">Delete Profile</button>
-        
+       <form action="/home/adminLogin/adminPage/showExistingStudents/<%= Student._id %>/edit" method="get">
+
+        <button class="btn btn-primary">Edit Details</button>
+
+    </form>
+
+    <form action="/home/adminLogin/adminPage/showExistingStudents/<%= Student._id %>?_method=DELETE" method="post">
+        <button class="btn btn-danger mt-0 ">Delete Profile</button>
+        </form>
         
     </div>
    
