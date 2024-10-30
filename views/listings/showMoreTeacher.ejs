@@ -81,14 +81,11 @@ button:hover {
             <p><strong>Username: </strong><%= Teacher.Username %> </p>
             <p><strong>Mobile No: </strong><%= Teacher.mobilenumber %> </p>
             <p><strong>Gender: </strong><%= Teacher.gender %> </p>
-            <p><strong>Date Of Birth: </strong><%= Teacher.dob %> </p>
-            <p><strong>Joining Date: </strong><%= Teacher.joiningdate %> </p>
+            <p><strong>Date Of Birth: </strong><%= new Date(Teacher.dob).toLocaleDateString('en-GB').replace(/\//g, '-') %> </p>
+            <p><strong>Joining Date: </strong><%= new Date(Teacher.joiningdate).toLocaleDateString('en-GB').replace(/\//g, '-') %> </p>
             <p><strong>Address: </strong><%= Teacher.address %> </p>
-
-            
+      
         </section>
-
-        
 
         <form action="/home/adminLogin/adminPage/showExistingTeachers/<%= Teacher._id %>/edit" method="get">
        
@@ -106,4 +103,4 @@ button:hover {
     </div>
    
 </body>
-</html>
+</html>  

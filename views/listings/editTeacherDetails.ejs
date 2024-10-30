@@ -55,23 +55,16 @@
         
             <div class="row">
         
-            <div class="mb-3 col-6">
-                <label for="Year Of Joining" class="form-label">Year Of Joining</label>
-                <input type="number" class="form-control" value="<%= Teacher.joiningdate %>" name="teacher[joiningdate]" required>
+                <div class="mb-3 col-6">
+                    <label for="Year Of Joining" class="form-label">Year Of Joining</label>
+                    <input type="number" class="form-control" 
+                           value="<%= Teacher.joiningdate ? new Date(Teacher.joiningdate).getFullYear() : '' %>" 
+                           name="teacher[joiningdate]" required>
+                </div>
         
-            </div>
-        
-        
-        
-           
              <div class="mb-3 col-6">
                     <label for="Email Id" class="form-label">Email Id</label>
                     <input type="email" class="form-control" value="<%= Teacher.Username %>" name="teacher[Username]" required>
-        
-              
-        
-               
-        
         
             </div>
         
@@ -79,64 +72,40 @@
         
         
         <div class="row">
-        
-        
-           
-        
                 <div class="mb-3 col">
                     <label for="Mobile No" class="form-label">Mobile No</label>
                     <input type="number" class="form-control"value="<%= Teacher.mobilenumber %>" name="teacher[mobilenumber]" required >
         
                 </div>
          
-        
-           
                 <div class="mb-3 col-6">
                     <label for="Gender" class="form-label">Select Gender</label>
-                    <select class="form-select" aria-label="Gender" name="teacher[gender]">
-                        <option selected>Select Gender</option>
-                        <option value="Male">Male</option>
-                        <option value="Female">Female</option>
-                        <option value="Transgender">Transgender</option>
-                        
-                      </select>
-                   
-                </div>
-          </div>
-        
-     
-        
-                <div class="mb-3 col-6">
-                    <label for="DOB" class="form-label">D.O.B</label>
-                    <input type="date" class="form-control" value="<%= Teacher.dob %>" name="teacher[dob]" required >
-        
+                    <select class="form-select" aria-label="Gender" name="teacher[gender]" required>
+                        <option value="Male" <%= Teacher.gender === "Male" ? "selected" : "" %>>Male</option>
+                        <option value="Female" <%= Teacher.gender === "Female" ? "selected" : "" %>>Female</option>
+                        <option value="Transgender" <%= Teacher.gender === "Transgender" ? "selected" : "" %>>Transgender</option>
+                    </select>
                 </div>
         
-        
-        
-                
-        
-        
-                
-        
-               
+          <div class="mb-3 col-3"> 
+            <label for="DOB" class="form-label">D.O.B</label>
+            <input type="date" class="form-control" 
+                   value="<%= Teacher.dob ? new Date(Teacher.dob).toISOString().split('T')[0] : '' %>" 
+                   name="teacher[dob]" required>
+        </div>
         
                 <div class="mb-3 col-6">
                     <label for="Address" class="form-label">Enter Teacher Address</label>
-                    <textarea name="teacher[address]" class="form-control" rows="6" cols="50" value="<%= Teacher.address %>" required></textarea>
+                    <textarea name="teacher[address]" class="form-control" rows="6" required><%= Teacher.address %></textarea>
                 </div>
         
                
         
             </div>
         
-        
-          <button class="btn btn-danger offset-6">Submit Changes</button>
-        
-
-
-
-  
+            <div class="d-flex justify-content-center">
+                <button class="btn btn-danger">Submit Changes</button>
+            </div>
 
 </form>
 
@@ -148,4 +117,4 @@ crossorigin="anonymous"
 ></script>
     
 </body>
-</html>
+</html>                                                        

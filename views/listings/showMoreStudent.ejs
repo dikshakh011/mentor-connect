@@ -83,7 +83,7 @@ button:hover {
             <p><strong>Username: </strong><%= Student.Username %> </p>
             <p><strong>Mobile No: </strong><%= Student.mobilenumber %> </p>
             <p><strong>Gender: </strong><%= Student.gender %> </p>
-            <p><strong>Date Of Birth: </strong><%= Student.dob %> </p>
+            <p><strong>Date Of Birth: </strong><%=  new Date(Student.dob).toLocaleDateString('en-GB').replace(/\//g, '-') %> </p>
             <p><strong>Year Of Admission: </strong><%= Student.yearofadmission %> </p>
             <p><strong>Address: </strong><%= Student.address %> </p>
 
