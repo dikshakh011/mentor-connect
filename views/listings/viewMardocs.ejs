@@ -1,0 +1,92 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2>PDF Files</h2>
+    <ul>
+        <% pdfFiles.forEach((pdfUrl, index)=> { %>
+            <li>
+                <a href="<%= pdfUrl %>" target="_blank">Download PDF <%= index + 1 %></a>
+            </li>
+            <% }); %>
+    </ul>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAR Documents</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+            background: linear-gradient(to right, #ffcccc, #ff6666);
+            color: black;
+        }
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background: white;
+            color: black;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background: #ff6666;
+            color: white;
+        }
+        a {
+            text-decoration: none;
+            color: black;
+            &:hover{
+                color:#ff6666;
+            }
+        }
+        button {
+            background: linear-gradient(to right, #ff5733, #ff0000);
+            border: none;
+            padding: 10px 15px;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button:hover {
+            background: linear-gradient(to right, #ff0000, #990000);
+        }
+    </style>
+</head>
+<body>
+    <h2>View Uploaded MAR Documents</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>File Name</th>
+                <th>View</th>
+                
+            </tr>
+        </thead>
+        <tbody>
+            <% pdfFiles.forEach(function(fileUrl) { %>
+                <tr>
+                    <td><%= fileUrl.split("/").pop() %></td>
+                    <td><a href="<%= fileUrl %>" target="_blank">Open PDF</a></td>
+                    
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+</body>
+</html>

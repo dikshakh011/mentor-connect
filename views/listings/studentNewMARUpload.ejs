@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAR PDF List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+            background: linear-gradient(to right, #ffcccc, #ff6666);
+            color: black;
+        }
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background: white;
+            color: black;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background: #ff6666;
+            color: white;
+        }
+        a {
+            text-decoration: none;
+            color: black;
+        }
+        button {
+            background: linear-gradient(to right, #ff5733, #ff0000);
+            border: none;
+            padding: 10px 15px;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button:hover {
+            background: linear-gradient(to right, #ff0000, #990000);
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Upload MAR PDFs</h2>
+
+
+    <form id="uploadForm" enctype="multipart/form-data" action="/home/studentLogin/studentPage/mardocs/uploadNewMarDoc" method="get">
+        <input type="hidden" name="subFolder" value="<%= subFolder%>" >
+        <input type="file" name="pdfs" id="fileInput" multiple accept="application/pdf">
+        <button type="button" onclick="uploadFiles()">Add PDF</button>
+    </form>
+
+    <script>
+        async function uploadFiles() {
+            const fileInput = document.getElementById("fileInput");
+            const formData = new FormData();
+             // Get subFolder from the hidden input field
+               const subFolderInput = document.querySelector("input[name='subFolder']");
+               const subFolder = subFolderInput ? subFolderInput.value : "default_folder";
+
+                // Append subFolder to formData
+                  formData.append("subFolder", subFolder);
+
+                  if (fileInput.files.length === 0) {
+                alert("Please select a file.");
+                return;
+            }
+
+
+            for (let file of fileInput.files) {
+                formData.append("pdfs", file);
+            }
+
+            try {
+                // Call the backend API here
+                const response = await fetch("/upload", {
+                    method: "POST",
+                    body: formData
+                });
+
+                // Check if the request was successful
+                const data = await response.json();
+
+                if (response.ok) {
+                    console.log("Uploaded Files:", data);
+                    alert("Upload successful!");
+                } else {
+                    console.error("Error:", data.message);
+                    console.log("Failed!");
+                    alert("Upload failed!");
+                }
+            } catch (error) {
+                console.log("catch block");
+                console.error("Error uploading files", error);
+                alert("Upload failed!");
+            }
+        }
+    </script>
+
+    
+    
+</body>
+</html>
+

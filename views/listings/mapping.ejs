@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Teacher-Student Mapping Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+</head>
+<body class="bg-gray-100 min-h-screen py-8 px-6">
+  <div class="max-w-7xl mx-auto">
+    <h2 class="text-3xl font-semibold mb-6 text-center">Teacher-Student Mappings</h2>
+
+    <% if (message) { %>
+      <div class="px-4 py-3 rounded mb-6
+          <%= message.toLowerCase().includes('error') || message.toLowerCase().includes('fail') ? 'bg-red-100 border border-red-400 text-red-700' : 'bg-green-100 border border-green-400 text-green-700' %>">
+        <%= message %>
+      </div>
+    <% } %>
+
+    <div class="overflow-x-auto shadow-lg rounded-lg mb-8 bg-white">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-100 text-gray-800">
+          <tr>
+            <th class="px-6 py-3 text-left text-xs font-medium uppercase">Teacher</th>
+            <th class="px-6 py-3 text-left text-xs font-medium uppercase">Students</th>
+            <th class="px-6 py-3 text-left text-xs font-medium uppercase">Capacity</th>
+            <th class="px-6 py-3 text-left text-xs font-medium uppercase">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200">
+          <% mappings.forEach(mapping => { 
+              const maxStudents = mapping.maxStudents || 5;
+              const currentCount = mapping.studentId.length;
+          %>
+            <tr>
+              <td class="px-6 py-4 font-semibold"><%= mapping.teacherId.name %></td>
+              <td class="px-6 py-4">
+                <% if (currentCount === 0) { %>
+                  <p class="italic text-gray-500">No students assigned</p>
+                <% } else { %>
+                  <ul class="space-y-1">
+                    <% mapping.studentId.forEach(student => { %>
+                      <li class="flex justify-between items-center">
+                        <span><%= student.name %> (<%= student.univno %>)</span>
+                        <form action="/mapping/remove-student" method="POST" class="inline">
+                          <input type="hidden" name="studentId" value="<%= student._id %>">
+                          <input type="hidden" name="teacherId" value="<%= mapping.teacherId._id %>">
+                          <button class="text-red-500 hover:text-red-700 text-sm" title="Remove student">Remove</button>
+                        </form>
+                      </li>
+                    <% }); %>
+                  </ul>
+                <% } %>
+              </td>
+              <td class="px-6 py-4 text-center">
+                <span class="<%= currentCount >= maxStudents ? 'text-red-600 font-semibold' : 'text-green-600 font-semibold' %>">
+                  <%= currentCount %> / <%= maxStudents %>
+                </span>
+              </td>
+              <td class="px-6 py-4 space-y-2">
+                <form action="/mapping/delete-teacher" method="POST" onsubmit="return confirm('Are you sure you want to delete this teacher and all their mappings?');">
+                  <input type="hidden" name="teacherId" value="<%= mapping.teacherId._id %>">
+                  <button class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm">Delete Teacher</button>
+                </form>
+
+                <form action="/mapping/update-max" method="POST" class="mt-2 flex items-center space-x-2">
+                  <input type="hidden" name="teacherId" value="<%= mapping.teacherId._id %>">
+                  <input
+                    type="number"
+                    name="maxStudents"
+                    min="1"
+                    class="border px-2 py-1 text-sm rounded w-20"
+                    placeholder="Max"
+                    value="<%= maxStudents %>"
+                    required
+                  />
+                  <button class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm">Update</button>
+                </form>
+              </td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+
+    <% if (leftoverStudents.length >= 0) { %>
+      <div class="bg-white shadow rounded-lg p-4 max-h-96 overflow-y-auto">
+        <h3 class="text-xl font-semibold mb-2">Unmapped Students</h3>
+        <ul class="divide-y divide-gray-200">
+          <% leftoverStudents.forEach(student => { %>
+            <li class="py-2 flex justify-between items-center">
+              <span><%= student.name %> (<%= student.univno %>)</span>
+              <form action="/mapping/add-student" method="POST" class="flex items-center space-x-2">
+                <input type="hidden" name="studentId" value="<%= student._id %>">
+                <select name="teacherId" class="border text-sm px-2 py-1 rounded" required>
+                  <% mappings.forEach(m => {
+                      const teacherMax = m.maxStudents || 5;
+                      const assignedCount = m.studentId.length;
+                      const isFull = assignedCount >= teacherMax;
+                  %>
+                    <option value="<%= m.teacherId._id %>" <%= isFull ? 'disabled class="text-gray-400"' : '' %>>
+                      <%= m.teacherId.name %> (<%= assignedCount %>/<%= teacherMax %>)
+                    </option>
+                  <% }) %>
+                </select>
+                <button
+                  type="submit"
+                  class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-sm"
+                >
+                  Add
+                </button>
+              </form>
+            </li>
+          <% }); %>
+        </ul>
+      </div>
+    <% } else { %>
+      <p class="text-center text-gray-600 italic">All students are assigned to teachers.</p>
+    <% } %>
+
+<div class="mt-6 flex justify-end gap-4 items-center">
+  <a href="/home/adminLogin/adminPage/mapping"
+     class="bg-gray-700 hover:bg-gray-800 text-white px-4 py-2 rounded text-sm">
+    View Mapping
+  </a>
+
+  <form action="/mapping/delete-all" method="POST"
+        onsubmit="return confirm('Are you sure you want to delete all mappings and clear deletion history?');">
+    <button class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded text-sm">
+      Delete Mapping
+    </button>
+  </form>
+
+  <a href="/mapping/history"
+     class="bg-gray-700 hover:bg-gray-800 text-white px-4 py-2 rounded text-sm">
+    View Deletion History
+  </a>
+</div>
+
+
+ 
+  </div>
+</body>                               
+</html>

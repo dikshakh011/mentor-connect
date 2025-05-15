@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View MOOCs Documents</title>
+    <style>
+        /* General Page Styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+
+        /* Heading */
+        h2 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        /* Responsive Table Wrapper */
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        /* Table Styling */
+        table {
+            width: 90%;
+            max-width: 800px;
+            margin: 0 auto;
+            border-collapse: collapse;
+            background: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        /* Table Header */
+        th {
+            background-color: #007bff;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+
+        /* Table Rows */
+        td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            text-align: center;
+        }
+
+        /* Alternate Row Colors */
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        /* Hover Effect */
+        /* tr:hover {
+            background-color: #e6f2ff;
+        } */
+
+        /* Button Styling */
+        /* .action-btn {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .action-btn:hover {
+            background-color: #218838;
+        } */
+    </style>
+</head>
+<body>
+    <form method="get" action="/home/teacherLogin/teacherPage/totalMoocsDoc">
+    <h2>MOOCs Documents Report </h2>
+
+    
+        <div class="table-container">
+            <table>
+                <thead>
+                    <th scope="col">Student Name</th>
+                    <th scope="col">Total MOOCs Points</th>
+                    
+                   
+                </thead>
+                <tbody>
+                    <% listOfStudents.forEach((Student,index)=> { %>
+            
+                    <tr>
+                     
+                       <!-- <td>hello</td>
+                       <td>hi</td> -->
+                      <td><%= Student.studentName %></td>
+                      <td><%= (Student.moocsPoints.reduce((sum,num)=>sum+num,0)>=0)?(Student.moocsPoints.reduce((sum,num)=>sum+num,0)):0 %></td>
+                      
+                      
+                    
+                    </tr>
+            
+                    <% }); %>
+                  </tbody>
+            </table>
+        </div>
+  
+    </form> 
+</body>
+</html>

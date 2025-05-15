@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student List</title>
+    <style>
+        /* General Page Styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+
+        /* Heading */
+        h2 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        /* Message Styling */
+        p {
+            font-size: 16px;
+            color: #d9534f;
+            font-weight: bold;
+        }
+
+        /* Responsive Table Wrapper */
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        /* Table Styling */
+        table {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            border-collapse: collapse;
+            background: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            white-space: nowrap; /* Prevents text wrapping issues */
+        }
+
+        /* Table Header */
+        th {
+            background-color: #007bff;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+
+        /* Table Rows */
+        td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            text-align: center;
+        }
+
+        /* Alternate Row Colors */
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        /* Hover Effect */
+        tr:hover {
+            background-color: #e6f2ff;
+        }
+
+        /* Button Styling */
+        .action-btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            display: inline-block;
+        }
+
+        .action-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .action-btn:active {
+            background-color: #003d80;
+        }
+    </style>
+</head>
+<body>
+    <h2>Students Assigned to <%= teacherName %></h2>
+
+    <% if (message) { %>
+        <p><%= message %></p>
+    <% } else { %>
+        <div class="table-container">
+            <table>
+                <tr>
+                    <th>University No</th>
+                    <th>Name</th>
+                    <th>Course</th>
+                    <th>Department</th>
+                    <th>Father's Name</th>
+                    <th>Mother's Name</th>
+                    <th>Mobile Number</th>
+                    <th>Gender</th>
+                    <th>Date of Birth</th>
+                    <th>Year of Admission</th>
+                    <th>Address</th>
+                    <th colspan="2">Action</th>
+                    
+                </tr>
+                <% students.forEach(student => { %>
+                    <tr>
+                        <td><%= student.univno %></td>
+                        <td><%= student.name %></td>
+                        <td><%= student.course %></td>
+                        <td><%= student.department %></td>
+                        <td><%= student.fathername %></td>
+                        <td><%= student.mothername %></td>
+                        <td><%= student.mobilenumber %></td>
+                        <td><%= student.gender %></td>
+                        <td><%= student.dob.toDateString() %></td>
+                        <td><%= student.yearofadmission %></td>
+                        <td><%= student.address %></td>
+                        <td>
+                            <form action="/home/teacherLogin/teacherPage/studentlist/setStudentMar" method="POST">
+                                <input type="hidden" name="studentId" value="<%= student._id %>">
+                                <button type="submit" class="action-btn">View MAR Doc</button>
+                            </form>
+                            
+                        </td>
+                        <td>
+                            <form action="/home/teacherLogin/teacherPage/studentlist/setStudentMoocs" method="POST">
+                                <input type="hidden" name="studentId" value="<%= student._id %>">
+                                <button type="submit" class="action-btn">View MOOCs Doc</button>
+                            </form>
+                        </td>
+                    </tr>
+                <% }) %>
+            </table>
+        </div>
+    <% } %>
+</body>
+</html>
+
+
+

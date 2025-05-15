@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Deletion History</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f9fafb;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1 {
+      text-align: center;
+      margin-top: 30px;
+      color: #2c3e50;
+    }
+
+    .container {
+      width: 92%;
+      max-width: 1200px;
+      margin: 30px auto;
+      background: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.08);
+      padding: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+
+    th, td {
+      border: 1px solid #e1e4e8;
+      padding: 12px;
+      text-align: left;
+      font-size: 14px;
+    }
+
+    th {
+      background-color: #f4f6f8;
+      color: #333;
+      font-weight: 600;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f9fbfc;
+    }
+
+    tr:hover {
+      background-color: #eef3f7;
+    }
+
+    .no-history {
+      text-align: center;
+      font-style: italic;
+      color: #888;
+    }
+
+    .btn-wrapper {
+      text-align: right;
+      margin-top: 20px;
+    }
+
+    .back-btn {
+      background-color: #2d3748;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .back-btn:hover {
+      background-color: #1a202c;
+    }
+  </style>
+</head>
+<body>
+  <h1>Deletion History Records</h1>
+  <div class="container">
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Deleted At</th>
+          <th>Deleted Teacher Name</th>
+          <th>Deleted Student Name</th>
+          <th>Student Univ No</th>
+          <th>Previous Assigned Teacher Name</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if(history.length === 0) { %>
+          <tr>
+            <td colspan="6" class="no-history">No deletion history found</td>
+          </tr>
+        <% } else { %>
+          <% history.filter(record => (record.type === 'teacher' || record.studentId !== null) && record.teacherId === null).forEach(record =>  { %>
+            <tr>
+              <td><%= record.type %></td>
+              <td><%= new Date(record.deletedAt).toLocaleString() %></td>
+              <td><%= record.teacherName || 'N/A' %></td>
+              <td><%= record.studentName || 'N/A' %></td>
+              <td><%= record.studentUnivNo || 'N/A' %></td>
+              <td><%= record.previousTeacherName || 'N/A' %></td>
+            </tr>
+          <% }); %>
+        <% } %>
+      </tbody>
+    </table>
+
+    <div class="btn-wrapper">
+      <a href="/home/adminLogin/adminPage/mapping" class="back-btn">Go Back</a>
+    </div>
+  </div>
+</body>
+</html>

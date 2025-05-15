@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View MAR Documents</title>
+    <style>
+        /* General Page Styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+
+        /* Heading */
+        h2 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        /* Responsive Table Wrapper */
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        /* Table Styling */
+        table {
+            width: 90%;
+            max-width: 800px;
+            margin: 0 auto;
+            border-collapse: collapse;
+            background: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        /* Table Header */
+        th {
+            background-color: #007bff;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+
+        /* Table Rows */
+        td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            text-align: center;
+        }
+
+        /* Alternate Row Colors */
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        /* Hover Effect */
+        tr:hover {
+            background-color: #e6f2ff;
+        }
+
+        /* Button Styling */
+        .action-btn {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .action-btn:hover {
+            background-color: #218838;
+        }
+
+        /* Status Styling */
+        .status {
+            font-weight: bold;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            display: inline-block;
+            min-width: 80px;
+        }
+
+        .pending { background-color: #ffc107; } /* Yellow */
+        .verified { background-color: #28a745; } /* Green */
+        .rejected { background-color: #dc3545; } /* Red */
+
+        /* Remarks Styling */
+        .remarks {
+            width: 90%;
+            max-width: 800px;
+            height: 80px;
+            padding: 10px;
+            margin-top: 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            resize: vertical;
+        }
+
+    </style>
+</head>
+<body>
+    <form method="post" action="/home/teacherLogin/teacherPage/studentlist/viewMarTeach/submit">
+        <h2>MAR Documents for <%= studentName %></h2>
+
+        <% if (pdfFiles.length === 0) { %>
+            <p>No MAR documents uploaded yet.</p>
+        <% } else { %>
+            <div class="table-container">
+                <table>
+                    <tr>
+                        <th>File Name</th>
+                        <th>View</th>
+                        <th>Credits</th>
+                        <th>Status</th>
+                    </tr>
+                    <% pdfFiles.forEach((pdf, index) => { %>
+                        <tr>
+                            <td><%= pdf.split("/").pop()  %></td>
+                            <td>
+                                <a href="<%= pdf %>" target="_blank" class="action-btn">View</a>
+                            </td>
+                            <td>
+                                <input type="number" name="fields[<%= index %>]" id="field_<%= index %>" 
+                                    value="<%= (marPoints[index] !== undefined && marPoints[index] != -1 && marPoints[index] !== '') ? marPoints[index] : '' %>"
+                                    oninput='updateStatus(Number("<%= index %>"))'>
+                            </td>
+                            
+                            
+                            <td>
+                                <input type=text id="status_<%= index %>" 
+                                class="<%= (marPoints[index] == undefined || marPoints[index] == -1 || marPoints[index] === '' || !( marPoints[index]>= 0)) ? 'status pending' : (marPoints[index]== 0 || marPoints[index]==0 || marPoints[index]<-1)? 'status rejected' : 'status verified' %>"" 
+                                name="status[<%= index%>]" 
+                                value="<%= (marPoints[index] === undefined || marPoints[index] == -1 || marPoints[index] === '' || !( marPoints[index]>= 0)) ? 'Pending' : (marPoints[index]== 0 || marPoints[index]== 0 || marPoints[index]<-1)? 'Rejected' : 'Verified' %>">
+                                    
+                                </input>
+                            </td>
+                        </tr>
+                    <% }) %>
+                </table>
+
+                <!-- Remarks Section -->
+                <textarea name="remarks" class="remarks" placeholder="Why the document was rejected?..."></textarea>
+                <br><br>
+                <div id="statusInfo"></div>
+                <br><br>
+                <button type="submit" value="Save" class="action-btn">Save</button>
+            </div>
+        <% } %>
+    </form>
+
+    <script>
+        function updateStatus(index) {
+            let field = document.getElementById("field_" + index);
+            let statusElement = document.getElementById("status_" + index);
+            
+            let value = field.value; // Get the input value
+    
+            if (value === "" || value == -1 || isNaN(value)) {
+                statusElement.value = "Pending";
+                statusElement.className = "status pending";
+            } else if (value == 0) {
+                statusElement.value = "Rejected";
+                statusElement.className = "status rejected";
+            } else if (value > 0) {
+                statusElement.value = "Verified";
+                statusElement.className = "status verified";
+            }
+        }
+    
+        document.getElementById("statusInfo").innerHTML = `
+        <span style="color: black;">Check status:</span> &nbsp;&nbsp;
+        <span style="color: red;">zero(0)- 'rejected'</span> &nbsp;&nbsp;&nbsp;
+        <span style="color: orange;">empty - 'pending'</span> &nbsp;&nbsp;&nbsp;
+        <span style="color: green;">any value(>0) - 'verified'</span>
+    `;
+
+        // Initialize statuses on page load
+        document.addEventListener("DOMContentLoaded", function () {
+            pdfFiles.forEach((pdf, index) => { 
+                updateStatus(index); // Call the function for each field
+            })
+        });
+    </script>
+    
+</body>
+</html>
