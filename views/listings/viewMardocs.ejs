@@ -25,6 +25,7 @@
     <title>MAR Documents</title>
     <style>
         body {
+            position: relative;
             font-family: Arial, sans-serif;
             text-align: center;
             margin: 20px;
@@ -33,7 +34,7 @@
         }
         table {
             width: 80%;
-            margin: 20px auto;
+            margin: 40px auto;
             border-collapse: collapse;
             background: white;
             color: black;
@@ -54,6 +55,19 @@
                 color:#ff6666;
             }
         }
+
+        div{
+            position:absolute;
+            top:1rem;
+            border: 0.1rem solid pink;
+            margin-top: 1rem;
+            margin-bottom:1rem;
+            left:50%;
+            transform:translate(-50%,50%);
+            text-align: center;
+            width:8.5rem;
+            background-color: aliceblue;
+        }
         button {
             background: linear-gradient(to right, #ff5733, #ff0000);
             border: none;
@@ -70,22 +84,31 @@
 </head>
 <body>
     <h2>View Uploaded MAR Documents</h2>
+    <div>Year: 4th (final)</div>
     <table>
         <thead>
             <tr>
                 <th>File Name</th>
+                <th>Activity Category</th>
+                <th>Date of Certificate</th>
                 <th>View</th>
                 
             </tr>
         </thead>
         <tbody>
-            <% pdfFiles.forEach(function(fileUrl) { %>
-                <tr>
-                    <td><%= fileUrl.split("/").pop() %></td>
-                    <td><a href="<%= fileUrl %>" target="_blank">Open PDF</a></td>
-                    
-                </tr>
-            <% }); %>
+<% 
+  const arr = ['Tech Quiz', 'Student Chapter', 'Tree Plantation', 'College Sport']; 
+  const date = ['07-03-2025', '09-03-2025', '22-04-2025', '21-10-2024']; 
+  pdfFiles.forEach((fileUrl, index) => { 
+%>
+  <tr>
+    <td><%= fileUrl.split("/").pop() %></td>
+    <td><%= arr[index] %></td>
+    <td><%= date[index] %></td>
+    <td><a href="<%= fileUrl %>" target="_blank">Open PDF</a></td>
+  </tr>
+<% }); %>
+
         </tbody>
     </table>
 </body>

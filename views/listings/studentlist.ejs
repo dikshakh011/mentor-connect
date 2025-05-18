@@ -104,32 +104,26 @@
             <table>
                 <tr>
                     <th>University No</th>
+                    <th>Year</th>
                     <th>Name</th>
                     <th>Course</th>
                     <th>Department</th>
-                    <th>Father's Name</th>
-                    <th>Mother's Name</th>
                     <th>Mobile Number</th>
                     <th>Gender</th>
                     <th>Date of Birth</th>
-                    <th>Year of Admission</th>
-                    <th>Address</th>
                     <th colspan="2">Action</th>
                     
                 </tr>
                 <% students.forEach(student => { %>
                     <tr>
                         <td><%= student.univno %></td>
+                        <td>4th(final)</td>
                         <td><%= student.name %></td>
                         <td><%= student.course %></td>
                         <td><%= student.department %></td>
-                        <td><%= student.fathername %></td>
-                        <td><%= student.mothername %></td>
                         <td><%= student.mobilenumber %></td>
                         <td><%= student.gender %></td>
                         <td><%= student.dob.toDateString() %></td>
-                        <td><%= student.yearofadmission %></td>
-                        <td><%= student.address %></td>
                         <td>
                             <form action="/home/teacherLogin/teacherPage/studentlist/setStudentMar" method="POST">
                                 <input type="hidden" name="studentId" value="<%= student._id %>">

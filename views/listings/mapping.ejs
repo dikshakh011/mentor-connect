@@ -95,12 +95,13 @@
                 <input type="hidden" name="studentId" value="<%= student._id %>">
                 <select name="teacherId" class="border text-sm px-2 py-1 rounded" required>
                   <% mappings.forEach(m => {
-                      const teacherMax = m.maxStudents || 5;
+                      const teacherMax = m.maxStudents;
                       const assignedCount = m.studentId.length;
                       const isFull = assignedCount >= teacherMax;
                   %>
-                    <option value="<%= m.teacherId._id %>" <%= isFull ? 'disabled class="text-gray-400"' : '' %>>
-                      <%= m.teacherId.name %> (<%= assignedCount %>/<%= teacherMax %>)
+
+                    <option value="<%= m.teacherId._id %>" <%= isFull ? 'disabled class="hover:text-gray-400"' : '' %>>
+                      <%= m.teacherId.name%> (<%= assignedCount %>/<%= teacherMax %>)
                     </option>
                   <% }) %>
                 </select>

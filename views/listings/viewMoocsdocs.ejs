@@ -6,15 +6,30 @@
     <title>MOOCs Documents</title>
     <style>
         body {
+            position: relative;
             font-family: Arial, sans-serif;
             text-align: center;
             margin: 20px;
             background: linear-gradient(to right, #ffcccc, #ff6666);
             color: black;
         }
+        
+        div{
+            position:absolute;
+            top:1rem;
+            border: 0.1rem solid pink;
+            margin-top: 1rem;
+            margin-bottom:1rem;
+            left:50%;
+            transform:translate(-50%,50%);
+            text-align: center;
+            width:8.5rem;
+            background-color: aliceblue;
+        }
+
         table {
             width: 80%;
-            margin: 20px auto;
+            margin: 40px auto;
             border-collapse: collapse;
             background: white;
             color: black;
@@ -51,6 +66,7 @@
 </head>
 <body>
     <h2>View Uploaded MOOCs Documents</h2>
+     <div style="width:8rem; background-color: aliceblue;">Year: 4th (final)</div>
     <table>
         <thead>
             <tr>

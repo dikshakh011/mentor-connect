@@ -7,11 +7,18 @@
     <style>
         /* General Styling */
         body {
+           position: relative;
             font-family: Arial, sans-serif;
             background-color: #f4f4f9;
             margin: 0;
             padding: 20px;
             text-align: center;
+        }
+
+        select{
+            position:absolute;
+            top:6.83rem;
+            left:15rem;
         }
 
         h2 {
@@ -25,6 +32,7 @@
         }
 
         table {
+           
             width: 90%;
             max-width: 800px;
             margin: 0 auto;
@@ -83,16 +91,23 @@
     <h2>Progress Report of <%= studentName %></h2>
 
     <div class="table-container">
-        <h3>MAR Documents</h3>
-        <table>
+
+        <h3>MAR Documents</h3> 
+               
+        <select style="max-height: max-content;" name="year" id="year"><option value="4th (final)">4th (final)</option></select>        <table>
             <tr>
                 <th>File Name</th>
+                <th>Activity Category</th>
+                <th>Date of Certificate</th>
                 <th>View</th>
                 <th>Credits</th>
                 <th>Status</th>
             </tr>
             <% let totalMarCredits = 0; %>
-            <% pdfMarFiles.forEach((doc, index) => { %>
+            <% 
+  const arr = ['Tech Quiz', 'Student Chapter', 'Tree Plantation', 'College Sport']; 
+  const date = ['07-03-2025', '09-03-2025', '22-04-2025', '21-10-2024']; 
+pdfMarFiles.forEach((doc, index) => { %>
                 <% 
                     let statusClass = "pending"; 
                     let statusText = "Pending"; 
@@ -107,15 +122,17 @@
                 %>
                 <tr>
                     <td><%= doc.split("/").pop() %></td>
+                    <td><%= arr[index] %></td>
+                    <td><%= date[index] %></td>
                     <td><a href="<%= doc %>" target="_blank" class=" status <%= statusClass%>">View</a></td>
-                    <td><%= marPoints[index] > 0 ? marPoints[index] : (marPoints[index]== -1)? "null" : "Rejected" %></td>
+                    <td><%= marPoints[index] > 0 ? marPoints[index] : (marPoints[index++]== -1)? "0" : "Rejected" %></td>
                     <td><span class="status <%= statusClass %>"><%= statusText %></span></td>
                 </tr>
             <% }) %>
         </table>
-        <br><br>
+        <br><br> Minimum required : 25 <br>
         <!-- <%= totalMarCredits >= 25 ? 'status verified': 'status rejected' %> -->
-        <p class="total-credits ">Total Verified MAR Credits: <%= totalMarCredits %></p>
+        <p class="total-credits ">Total Verified MAR Credits: <%= totalMarCredits%> (Unqualified, pending)</p>
         <br>
         <hr>
         <h3>MOOCs Documents</h3>

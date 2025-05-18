@@ -6,11 +6,23 @@
     <title>MAR PDF List</title>
     <style>
         body {
+            display:flex;
+            flex-direction: column;
+            align-items: center;
+            justify-items: center;
+            gap:1rem;
             font-family: Arial, sans-serif;
             text-align: center;
             margin: 20px;
             background: linear-gradient(to right, #ffcccc, #ff6666);
             color: black;
+        }
+        form{
+            display:flex;
+            flex-direction: row;
+            align-items: center;
+            justify-items: center;
+            gap:1rem;
         }
         table {
             width: 80%;
@@ -49,11 +61,20 @@
 <body>
 
     <h2>Upload MAR PDFs</h2>
-
+    <div style="width:8.5rem; background-color: aliceblue;">Year: 4th (final)</div>
 
     <form id="uploadForm" enctype="multipart/form-data" action="/home/studentLogin/studentPage/mardocs/uploadNewMarDoc" method="get">
         <input type="hidden" name="subFolder" value="<%= subFolder%>" >
         <input type="file" name="pdfs" id="fileInput" multiple accept="application/pdf">
+        <select name="activity" id="Activity" required class="border px-2 py-1 rounded">
+  <option value="" disabled selected>Select Activity Category</option> 
+  <option value="Tech Quiz">Tech Quiz</option> 
+  <option value="Student Chapter">Student Chapter</option> 
+  <option value="Tree Plantation">Tree Plantation</option> 
+  <option value="College Sports">College Sports</option> 
+</select>
+
+            <input type="date" name="date" id="Date">
         <button type="button" onclick="uploadFiles()">Add PDF</button>
     </form>
 

@@ -121,6 +121,7 @@
             <div class="table-container">
                 <table>
                     <tr>
+                        <th>Year</th>
                         <th>File Name</th>
                         <th>View</th>
                         <th>Credits</th>
@@ -128,6 +129,7 @@
                     </tr>
                     <% pdfFiles.forEach((pdf, index) => { %>
                         <tr>
+                            <td>4th (final)</td>
                             <td><%= pdf.split("/").pop()  %></td>
                             <td>
                                 <a href="<%= pdf %>" target="_blank" class="action-btn">View</a>

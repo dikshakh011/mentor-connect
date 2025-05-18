@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>View MOOCs Documents</title>
+    <title>View MAR Documents</title>
     <style>
         /* General Page Styling */
         body {
@@ -91,8 +91,12 @@
         <div class="table-container">
             <table>
                 <thead>
+                    <th scope="col">Year</th>
                     <th scope="col">Student Name</th>
-                    <th scope="col">Total Mar Points</th>
+                    <th scope="col">MAR Activity Category</th>
+                    <th scope="col">Total Mar Points Needed</th>
+                    <th scope="col">Total Mar Points Alloted</th>
+                    <th scope="col">Remark</th>
                     
                    
                 </thead>
@@ -103,8 +107,12 @@
                      
                        <!-- <td>hello</td>
                        <td>hi</td> -->
+                      <td>4th (final)</td>
                       <td><%= Student.studentName %></td>
-                      <td><%= (Student.marPoints.reduce((sum,num)=>sum+num,0)>=0)?(Student.marPoints.reduce((sum,num)=>sum+num,0)):0 %></td>
+                      <td>Tech Quiz,Student Chapter,Tree Plantation</td>
+                      <td>25</td>
+                      <td><%= Student.marPoints.filter(num => num > 0).reduce((sum, num) => sum + num, 0) %></td>
+                      <td>Pending, unqualified</td>
                       
                       
                     

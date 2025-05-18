@@ -121,14 +121,20 @@
             <div class="table-container">
                 <table>
                     <tr>
+                        <th>Year</th>
                         <th>File Name</th>
+                        <th>Activity Category</th>
+                        <th>Date of Certificate</th>
                         <th>View</th>
                         <th>Credits</th>
                         <th>Status</th>
                     </tr>
-                    <% pdfFiles.forEach((pdf, index) => { %>
+                    <% const arr= ['Tech Quiz','Student Chapter','Tree Plantation','College Sport'] ; const date=['07-03-2025','09-03-2025','22-04-2025','21-10-2024']; pdfFiles.forEach((pdf, index) => { %>
                         <tr>
+                            <td>4th (final)</td>
                             <td><%= pdf.split("/").pop()  %></td>
+                            <td><%= arr[index] %></td>
+                            <td><%= date[index++] %></td>
                             <td>
                                 <a href="<%= pdf %>" target="_blank" class="action-btn">View</a>
                             </td>
