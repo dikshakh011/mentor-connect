@@ -11,13 +11,67 @@
       integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
       crossorigin="anonymous"
     />
+
+    <style>
+      .excel-container{
+        margin-top: 1px;
+        display:flex;
+        flex-direction: column;
+        align-items: center;
+        justify-items: center;
+
+      }
+    </style>
+     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-    <h1 class="offset-3 mt-2 ">Add New Student :</h1>
+    <h1 style="font-size: 18px;" class="offset-1 mt-2 ">Add New Student Details :</h1>
+
+
+    
+    <div class="mt-1 excel-container">
+    <p>Do you want to add details via exporting Excel sheet?</p>
+
+    <form id="uploadExcelForm" enctype="multipart/form-data" method="post">
+    <input type="file" id="uploadfile" name="uploadfile" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+    <button type="button" id="uploadBtn">Upload Excel</button>
+  </form>
+  <div id="successMessage" style="display:none; color: green; margin-top: 20px;">
+    Data successfully saved to the database!
+  </div>
+  <div id="errorMessage" style="display:none; color: red; margin-top: 20px;">
+    Something went wrong while saving data. Please try again.
+  </div>
+
+        <script>
+    $(document).ready(function () {
+      $('#uploadBtn').on('click', function () {
+        const formData = new FormData($('#uploadExcelForm')[0]);
+        $.ajax({
+          url: '/uploadExcelFile',
+          type: 'POST',
+          data: formData,
+          processData: false,
+          contentType: false,
+          success: function (response) {
+            $('#successMessage').show();
+            $('#errorMessage').hide();
+          },
+          error: function () {
+            $('#errorMessage').show();
+            $('#successMessage').hide();
+          }
+        });
+      });
+    });
+  </script>
+    </div>
+
+  <hr>
 
     <form action="/home/adminLogin/adminPage/addNewStudent" method="post">
 
-<div class="row cols col-6 offset-3 mt-4">
+<div class="row cols col-6 offset-3 mt-3 p-1">
 
     <div class="mb-3">
 
@@ -54,10 +108,10 @@
         <label for="Registration No" class="form-label" >Registration No</label>
         <input type="number" class="form-control" placeholder="Enter Registration No" name="student[regno]" required>
         
-    </div>
+    
 
 
-
+   
     <div class="row">
 
         <div class="mb-3 col-6">
@@ -151,6 +205,8 @@
 
     </div>
 </div>
+</div>
+
 
   <button class="btn btn-danger">Submit</button>
 
@@ -204,6 +260,8 @@
         successModal.show();
       };
     </script>
+
+
   <% } %>
 
 <script

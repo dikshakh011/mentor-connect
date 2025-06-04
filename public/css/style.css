@@ -21,8 +21,8 @@ body{
 /* Navabar */
 
 .clg-logo{
-    height: 4rem;
-    width: 4rem;
+    height: 2rem;
+    width: 2rem;
     /* border-radius: 50%;
     object-fit: cover; */
 }
@@ -32,11 +32,13 @@ body{
 /* Home Elemets */
 .container{
    flex: 1;
-   height: 90vh;  
-   /* background-color: aqua; */
+   height: 90vh;
+     
+   /* background-color: aqua;  */
    display: flex;
    justify-content: center;
    align-items: center;
+
    
 }
 
@@ -44,10 +46,14 @@ body{
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 70%;
-    width: 70%;
-    /* background-color: yellow; */
-    
+    height: 100%;
+    width: 100%;
+    /* background-image: url("/img/asansol.jpeg");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-attachment: fixed;   
+     */
    
 }
 .options-home-container{

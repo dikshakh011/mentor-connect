@@ -152,7 +152,11 @@ app.post("/home/studentLogin/studentPage", async (req, res, next) => {
     // const token = createSecretToken(Student._id);
     // res.cookie("token", token, { withCredentials: true, httpOnly: true });
 
-    res.render("./listings/studentDashboard.ejs");
+        let { id } = req.session.studentId;
+
+    let StudentProfile = await studentLoginModel.findById(Student._id);
+
+    res.render("./listings/studentDashboard.ejs",{StudentProfile});
     next();
   } catch (error) {
     console.error("Login Error:", error);
@@ -170,6 +174,16 @@ const ensureAuth = (req, res, next) => {
   next();
 };
 
+// app.get(
+//   "/home/studentLogin/studentPage/",ensureAuth,
+//   async (req, res) => {
+//     let { id } = req.session.studentId;
+
+//     let Student = await studentLoginModel.findById(id);
+
+//     res.render("./listings/studentDashboard.ejs", { Student });
+//   }
+// );
 
 // Configure Cloudinary Storage
 const storage = new CloudinaryStorage({
@@ -1533,7 +1547,7 @@ var excelStorage = multer.diskStorage({
 });
 var excelUploads = multer({ storage: excelStorage });
 app.get("/", (req, res) => {
-  res.render("./listings/addStudentDataExcel");
+  res.render("./listings/addNewStudent.ejs");
 }); 
 
 app.post("/uploadExcelFile", excelUploads.single("uploadfile"), (req, res) => {
