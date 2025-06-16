@@ -64,7 +64,7 @@ app.listen(PORT, () => {
 });
 
 app.get("/", (req, res) => {
-  res.send("./listings/home.ejs")
+  res.render("./listings/home.ejs")
 });
 
 app.get("/home", (req, res) => {
