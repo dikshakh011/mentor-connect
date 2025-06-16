@@ -53,15 +53,18 @@ const url = process.env.MONGO_URL;
 
 
 
-app.listen(8080, () => {
-  console.log("App is Listening on Port 8080");
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Listening on port ${PORT}`);
+
+
 
   mongoose.connect(url);
   console.log("DB Connected");
 });
 
 app.get("/", (req, res) => {
-  res.send("working");
+  res.send("./listings/home.ejs")
 });
 
 app.get("/home", (req, res) => {
